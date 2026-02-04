@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+<style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Ananya! ??</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=Pacifico&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+    
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #ff9a9e;
+            --secondary: #fad0c4;
+            --accent: #a18cd1;
+            --text-dark: #2d3436;
+            --text-light: #ffffff;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animated Background Blobs (Mochis) */
+        .bg-mochi {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(40px);
+            z-index: -1;
+            opacity: 0.6;
+            animation: float 10s infinite ease-in-out alternate;
+        }
+        .mochi-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #ff9a9e; animation-duration: 12s; }
+        .mochi-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: #a18cd1; animation-duration: 15s; }
+        .mochi-3 { top: 40%; left: 40%; width: 300px; height: 300px; background: #fbc2eb; animation-duration: 8s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, 50px) scale(1.1); }
+        }
+
+        /* Loading Overlay */
+        #entry-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 0.8s ease;
+        }
+
+        .gift-box {
+            font-size: 5rem;
+            cursor: pointer;
+            animation: bounce 2s infinite;
+            transition: transform 0.3s;
+        }
+        .gift-box:hover { transform: scale(1.2) rotate(10deg); }
+        .click-text { margin-top: 20px; font-weight: 300; opacity: 0.7; letter-spacing: 2px; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease;
+        }
+
+        .visible { opacity: 1; transform: translateY(0); }
+
+        /* Typography */
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 4rem;
+            text-align: center;
+            background: -webkit-linear-gradient(45deg, #ff6b6b, #556270);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nickname {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #6c5ce7;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+        }
+
+        .nickname span { display: inline-block; transition: transform 0.2s; }
+        .nickname span:hover { transform: scale(1.3) rotate(5deg); cursor: default; }
+
+        /* Glass Cards for Message */
+        .card {
+            background: var(--glass);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 0.6s ease-out;
+        }
+
+        .card.in-view {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .card p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #4a4a4a;
+            margin-bottom: 1rem;
+        }
+        
+        .card .highlight {
+            font-weight: 700;
+            color: #d63031;
+            background: rgba(255, 234, 167, 0.4);
+            padding: 0 5px;
+            border-radius: 4px;
+        }
+
+        /* Interactive Cake */
+        .cake-container {
+            text-align: center;
+            margin: 4rem 0;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cake-instruction {
+            font-size: 0.9rem;
+            color: #636e72;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        .cake {
+            position: relative;
+            width: 200px;
+            height: 150px;
+            background: #ffeaa7;
+            border-radius: 20px 20px 0 0;
+            margin: 0 auto;
+            box-shadow: inset -15px -10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+        
+        /* Icing */
+        .cake::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: #ff7675;
+            border-radius: 20px 20px 10px 10px;
+            box-shadow: 0 4px 0 #fab1a0;
+        }
+
+        .candle {
+            width: 15px;
+            height: 60px;
+            background: linear-gradient(#81ecec, #74b9ff);
+            position: absolute;
+            top: -60px;
+            border-radius: 4px;
+        }
+
+        .flame {
+            width: 15px;
+            height: 25px;
+            background: #fdcb6e;
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -25px;
+            left: 0;
+            box-shadow: 0 0 10px #e17055, 0 0 20px #e17055;
+            animation: flicker 1s infinite alternate;
+            transform-origin: bottom center;
+        }
+
+        .flame.out {
+            display: none;
+        }
+
+        .smoke {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 1s;
+        }
+
+        .smoke.puff {
+            animation: smokeRise 1.5s forwards;
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        @keyframes smokeRise {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            100% { transform: translateY(-50px) scale(5); opacity: 0; }
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.9rem;
+            color: #636e72;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.8rem; }
+            .card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Elements -->
+    <div class="bg-mochi mochi-1"></div>
+    <div class="bg-mochi mochi-2"></div>
+    <div class="bg-mochi mochi-3"></div>
+
+    <!-- Entry Screen -->
+    <div id="entry-screen">
+        <div class="gift-box" onclick="enterSite()">??</div>
+        <div class="click-text">Tap to Open</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container" id="main-content">
+        
+        <header>
+            <h1>Happy Birthday Ananya ????</h1>
+            <div class="nickname">
+                <span>a</span><span>k</span><span>a</span> &nbsp;
+                <span>B</span><span>l</span><span>o</span><span>o</span><span>p</span><span>y</span> &nbsp;
+                <span>M</span><span>o</span><span>c</span><span>h</span><span>i</span> ??????
+            </div>
+        </header>
+
+        <!-- Message Cards -->
+        <section class="story">
+            <div class="card">
+                <p>I don’t even know where to start, but I’m genuinely really glad I met you ?</p>
+                <p>You’re one of those people who make conversations feel easy — <span class="highlight">caring ??</span> without trying, <span class="highlight">cute ??</span> without effort, and <span class="highlight">strong ??</span> in ways you probably don’t even notice yourself.</p>
+            </div>
+
+            <div class="card">
+                <p>I really admire how <span class="highlight">hardworking ???</span> you are, how you still show up for others even when you’re tired, and how you balance being playful ?? and serious ?? at the same time.</p>
+                <p>You have this warmth ?? that makes people feel comfortable around you, and honestly, that’s rare ??</p>
+            </div>
+
+            <div class="card">
+                <p>I’m truly grateful to have you as my friend ????</p>
+                <p>The jokes ??, the skits ??, the random talks ??, the silly moments ?? — all of it matters more than you think. You make days lighter just by being you ???</p>
+            </div>
+
+            <div class="card">
+                <p>I hope this year brings you <strong>good health ??</strong>, <strong>peace of mind ???</strong>, and <strong>success ??</strong> in everything you’re working toward.</p>
+                <p>You deserve happiness ??, lots of smiles ??, and moments where you feel proud of yourself ??</p>
+            </div>
+
+            <div class="card">
+                <p style="text-align: center; font-size: 1.3rem; font-family: 'Playfair Display', serif; font-style: italic;">
+                    Stay the same caring, sweet, bloopy mochi you are ????<br>
+                    Enjoy your day fully — today is all about YOU ?????
+                </p>
+            </div>
+        </section>
+
+        <!-- Interactive Cake -->
+        <div class="cake-container" onclick="blowCandle()">
+            <div class="cake-instruction" id="cake-text">Make a wish & click to blow the candle! ?</div>
+            <div class="cake">
+                <div class="candle">
+                    <div class="flame" id="flame"></div>
+                    <div class="smoke" id="smoke"></div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            Made with ?? for Ananya (Bloopy Mochi)
+        </footer>
+    </div>
+
+    <script>
+        // Entry Sequence
+        function enterSite() {
+            const entryScreen = document.getElementById('entry-screen');
+            const mainContent = document.getElementById('main-content');
+            
+            // 1. Confetti Explosion
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff9a9e', '#a18cd1', '#fad0c4', '#ffffff']
+            });
+
+            // 2. Fade out overlay
+            entryScreen.style.opacity = '0';
+            
+            setTimeout(() => {
+                entryScreen.style.display = 'none';
+                mainContent.classList.add('visible');
+                
+                // Trigger school of confetti
+                var duration = 3 * 1000;
+                var animationEnd = Date.now() + duration;
+                var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+                var random = function(min, max) { return Math.random() * (max - min) + min; }
+
+                var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) { return clearInterval(interval); }
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.7, 0.9), y: Math.random() - 0.2 } }));
+                }, 250);
+
+            }, 800);
+        }
+
+        // Scroll Reveal Animation (Intersection Observer)
+        const observerOptions = {
+            threshold: 0.2
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Cake Interaction
+        let candleBlown = false;
+        function blowCandle() {
+            if(candleBlown) return;
+            
+            const flame = document.getElementById('flame');
+            const smoke = document.getElementById('smoke');
+            const text = document.getElementById('cake-text');
+            
+            flame.classList.add('out');
+            smoke.classList.add('puff');
+            text.innerHTML = "Yay! Happy Birthday Ananya! ??";
+            text.style.color = "#d63031";
+            text.style.fontWeight = "bold";
+
+            candleBlown = true;
+
+            // Big Confetti burst
+            confetti({
+                particleCount: 200,
+                spread: 100,
+                origin: { y: 0.7 }
+            });
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
